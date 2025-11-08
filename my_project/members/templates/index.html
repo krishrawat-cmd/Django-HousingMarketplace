@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}StayEase | Find Your Perfect Stay{% endblock %}
+
+{% block hero %}
+<div class="zumper-hero-section hero-split">
+    <div class="hero-visual"></div>
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-10">
+                <div class="hero-content">
+                    <h1 class="zumper-hero-title">Find your <span>fresh start</span></h1>
+                    <p class="zumper-hero-subtitle">Discover millions of houses and apartments for rent.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    
+    <!-- Host CTA Section -->
+    <section class="host-cta-section text-center py-5 mb-5">
+        <div class="container">
+            <h2 class="mb-3">Ready to become a host?</h2>
+            <p class="mb-4">Share your space and earn extra income by hosting on StayEase</p>
+            <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg">Start hosting</a>
+        </div>
+    </section>
+    
+    <!-- Trending destinations -->
+    <section class="mb-5">
+        <div class="section-header mb-4">
+            <h2>Trending destinations</h2>
+            <p>Most popular choices for travelers</p>
+        </div>
+        <div class="row g-4 destination-grid">
+            <div class="col-md-6">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/delhi.jpg' %}" alt="New Delhi">
+                    <span class="dest-title">New Delhi 🇮🇳</span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/bangalore.jpg' %}" alt="Bangalore">
+                    <span class="dest-title">Bangalore 🇮🇳</span>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/mumbai.jpg' %}" alt="Mumbai">
+                    <span class="dest-title">Mumbai 🇮🇳</span>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/chennai.jpg' %}" alt="Chennai">
+                    <span class="dest-title">Chennai 🇮🇳</span>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/hyderabad.jpg' %}" alt="Hyderabad">
+                    <span class="dest-title">Hyderabad 🇮🇳</span>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a class="dest-card" href="#">
+                    <img src="{% static 'img/punducherry.jpg' %}" alt="Puducherry">
+                    <span class="dest-title">Puducherry 🇮🇳</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore by property type (moved below Trending) -->
+    <section class="mb-5">
+        <div class="section-header mb-4 reveal-on-scroll">
+            <h2>Explore by property type</h2>
+            <p>Find the perfect place to stay</p>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3 mb-4 reveal-on-scroll">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="bi bi-house-door"></i>
+                    </div>
+                    <h5>Entire homes</h5>
+                    <p>Private places just for you</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-4 reveal-on-scroll">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <h5>Apartments</h5>
+                    <p>Comfortable spaces in the city</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-4 reveal-on-scroll">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="bi bi-water"></i>
+                    </div>
+                    <h5>Beachfront</h5>
+                    <p>Properties with water views</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-4 reveal-on-scroll">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="bi bi-tree"></i>
+                    </div>
+                    <h5>Cabins</h5>
+                    <p>Cozy retreats in nature</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="mb-5">
+        <div class="section-header mb-4 reveal-on-scroll">
+            <h2>Featured places to stay</h2>
+            <p>Handpicked properties for your next adventure</p>
+        </div>
+        <div class="row">
+            {% if listings %}
+                {% for listing in listings %}
+                    <div class="col-md-6 col-lg-4 mb-4 reveal-on-scroll">
+                        <div class="property-card">
+                            <div class="property-image">
+                                <span class="property-badge">Featured</span>
+                                {% if listing.images.first %}
+                                    <img src="{{ listing.images.first.image_url }}" alt="{{ listing.title }}" class="img-fluid">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1200&auto=format&fit=crop" alt="{{ listing.title }}" class="img-fluid">
+                                {% endif %}
+                                <div class="property-favorite">
+                                    <button class="btn-favorite"><i class="bi bi-heart"></i></button>
+                                </div>
+                            </div>
+                            <div class="property-content">
+                                <div class="property-meta">
+                                    <span class="property-location"><i class="bi bi-geo-alt"></i> {{ listing.city }}</span>
+                                    <span class="property-rating"><i class="bi bi-star-fill"></i> 4.9</span>
+                                </div>
+                                <h5 class="property-title">{{ listing.title }}</h5>
+                                <p class="property-description">{{ listing.description|truncatechars:100 }}</p>
+                                <div class="property-features">
+                                    <span><i class="bi bi-people"></i> {{ listing.max_guests|default:"4" }} guests</span>
+                                    <span><i class="bi bi-door-closed"></i> {{ listing.bedrooms|default:"2" }} bedrooms</span>
+                                    <span><i class="bi bi-droplet"></i> {{ listing.bathrooms|default:"1" }} baths</span>
+                                </div>
+                                <div class="property-price">
+                                    <span class="price">₹{{ listing.price|default:1500 }}</span> / night
+                                </div>
+                                <a href="{% url 'listing_detail' listing.id %}" class="btn btn-outline-primary w-100 mt-3">View details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-house-slash fs-1"></i>
+                        <h4>No listings available</h4>
+                        <p>We're working on adding new properties. Check back soon!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="mb-5">
+        <div class="section-header mb-4">
+            <h2>What our guests say</h2>
+            <p>Experiences from our community</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <img src="https://via.placeholder.com/100x100" alt="Guest" class="rounded-circle">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p>"We had an amazing stay! The property was exactly as described, and the host was incredibly helpful and responsive."</p>
+                        <div class="testimonial-author">
+                            <h6>ankit ka bhai</h6>
+                            <span>bihar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <img src="https://via.placeholder.com/100x100" alt="Guest" class="rounded-circle">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p>"The location was perfect for our family vacation. Clean, comfortable, and with all the amenities we needed. Will definitely book again!"</p>
+                        <div class="testimonial-author">
+                            <h6>chor</h6>
+                            <span>vasant vihar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <img src="https://via.placeholder.com/100x100" alt="Guest" class="rounded-circle">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <p>"Such a beautiful property with stunning views. The host provided excellent recommendations for local attractions and restaurants."</p>
+                        <div class="testimonial-author">
+                            <h6>ankit</h6>
+                            <span>Karnal , haryana</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <!-- <section class="cta-section">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2>Ready to become a host?</h2>
+                <p>Share your space and earn extra income by hosting on StayEase</p>
+                <a href="#" class="btn btn-primary btn-lg mt-3">Start hosting</a>
+            </div>
+        </div>
+    </section> -->
+{% endblock %}

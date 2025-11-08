@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Bookings | StayEase{% endblock %}
+
+{% block hero %}
+<div class="bookings-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="hero-title">My Bookings</h1>
+                <p class="hero-subtitle">Manage and track all your StayEase reservations</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="bookings-container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="booking-filters">
+                <ul class="nav nav-pills" id="bookingFilters" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All Bookings</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="upcoming-tab" data-bs-toggle="pill" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="false">Upcoming</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="past-tab" data-bs-toggle="pill" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">Past</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cancelled-tab" data-bs-toggle="pill" data-bs-target="#cancelled" type="button" role="tab" aria-controls="cancelled" aria-selected="false">Cancelled</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'listing_list' %}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Book New Stay
+            </a>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="bookingFiltersContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            {% if bookings %}
+                <div class="booking-list">
+                    {% for booking in bookings %}
+                        <div class="booking-card card shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="booking-image rounded-4 overflow-hidden">
+                                            {% if booking.listing.images.first %}
+                                                <img src="{{ booking.listing.images.first.image_url }}" class="img-fluid" alt="{{ booking.listing.title }}">
+                                            {% else %}
+                                                <img src="{% static 'img/fallback-room.svg' %}" class="img-fluid" alt="{{ booking.listing.title }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="booking-details">
+                                            <h4 class="booking-title">
+                                                <a href="{% url 'listing_detail' booking.listing.id %}">{{ booking.listing.title }}</a>
+                                            </h4>
+                                            <p class="booking-location">
+                                                <i class="bi bi-geo-alt"></i> {{ booking.listing.city }}, {{ booking.listing.state }}
+                                            </p>
+                                            <div class="booking-dates">
+                                                <span class="date-range">
+                                                    <i class="bi bi-calendar3"></i> 
+                                                    {{ booking.check_in|date:"M j" }} - {{ booking.check_out|date:"M j, Y" }}
+                                                </span>
+                                                <span class="guests">
+                                                    <i class="bi bi-people"></i> {{ booking.guests }} guest{% if booking.guests > 1 %}s{% endif %}
+                                                </span>
+                                            </div>
+                                            <div class="booking-price mt-2">
+                                                <strong>Total:</strong> ₹{{ booking.total_price|default:1800 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="booking-status-actions text-md-end">
+                                            <div class="booking-status mb-3">
+                                                <span class="badge {% if booking.status == 'Confirmed' %}bg-success{% elif booking.status == 'Pending' %}bg-warning{% elif booking.status == 'Cancelled' %}bg-danger{% else %}bg-info{% endif %}">
+                                                    {{ booking.status }}
+                                                </span>
+                                            </div>
+                                            <div class="booking-actions">
+                                                <a href="/booking/{{ booking.id }}/" class="btn btn-primary btn-sm">
+                                                    <i class="bi bi-eye"></i> View Details
+                                                </a>
+                                                {% if booking.status != 'Cancelled' %}
+                                                    <!-- <a href="{% url 'modify_booking' booking.id %}" class="btn btn-warning btn-sm mt-2">
+                                                        <i class="bi bi-pencil"></i> Modify
+                                                    </a>
+                                                    <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm mt-2">
+                                                        <i class="bi bi-x-circle"></i> Cancel
+                                                    </a> -->
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-bookings-container text-center py-5">
+                    <div class="no-bookings-icon mb-3">
+                        <i class="bi bi-calendar-x fs-1"></i>
+                    </div>
+                    <h3>No Bookings Found</h3>
+                    <p class="text-muted mb-4">You don't have any bookings yet. Start exploring properties to book your next stay!</p>
+                    <a href="{% url 'listing_list' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-search"></i> Browse Properties
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+            <!-- This would be populated with upcoming bookings -->
+            <div class="no-bookings-container text-center py-5">
+                <div class="no-bookings-icon mb-3">
+                    <i class="bi bi-calendar-check fs-1"></i>
+                </div>
+                <h3>No Upcoming Bookings</h3>
+                <p class="text-muted mb-4">You don't have any upcoming bookings. Start exploring properties to book your next stay!</p>
+                <a href="{% url 'listing_list' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search"></i> Browse Properties
+                </a>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="past-tab">
+            <!-- This would be populated with past bookings -->
+            <div class="no-bookings-container text-center py-5">
+                <div class="no-bookings-icon mb-3">
+                    <i class="bi bi-calendar-event fs-1"></i>
+                </div>
+                <h3>No Past Bookings</h3>
+                <p class="text-muted mb-4">You don't have any past bookings. Start exploring properties to book your first stay!</p>
+                <a href="{% url 'listing_list' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search"></i> Browse Properties
+                </a>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
+            <!-- This would be populated with cancelled bookings -->
+            <div class="no-bookings-container text-center py-5">
+                <div class="no-bookings-icon mb-3">
+                    <i class="bi bi-calendar-x fs-1"></i>
+                </div>
+                <h3>No Cancelled Bookings</h3>
+                <p class="text-muted mb-4">You don't have any cancelled bookings.</p>
+                <a href="{% url 'listing_list' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search"></i> Browse Properties
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

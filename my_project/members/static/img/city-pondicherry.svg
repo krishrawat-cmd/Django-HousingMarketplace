@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a1ffce"/>
+      <stop offset="1" stop-color="#faffd1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g6)"/>
+  <g fill="#fff" opacity="0.9">
+    <rect x="250" y="320" width="300" height="30" rx="15"/>
+    <circle cx="180" cy="360" r="30"/>
+    <circle cx="620" cy="360" r="30"/>
+  </g>
+  <text x="30" y="470" font-family="Inter, Arial" font-size="28" fill="#1b4332" opacity="0.9">Puducherry</text>
+</svg>
+

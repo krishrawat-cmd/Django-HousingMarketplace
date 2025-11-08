@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ listing.title }} | StayEase{% endblock %}
+
+{% block hero %}
+<div class="listing-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'listing_list' %}">Properties</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ listing.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for form submission -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const reserveForm = document.getElementById("reserveForm");
+    
+    if (reserveForm) {
+        reserveForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(reserveForm);
+            
+            fetch(reserveForm.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{% url 'my_bookings' %}";
+                } else {
+                    // Redirect to my_bookings page even on error
+                    window.location.href = "{% url 'my_bookings' %}";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                // Redirect to my_bookings page on error
+                window.location.href = "{% url 'my_bookings' %}";
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+    <div class="listing-detail-container">
+        <!-- Property Header -->
+        <div class="property-header mb-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="property-title">{{ listing.title }}</h1>
+                    <div class="property-meta">
+                        <span class="property-location"><i class="bi bi-geo-alt"></i> {{ listing.city }}, {{ listing.state }}</span>
+                        <span class="property-rating"><i class="bi bi-star-fill"></i> 4.9 <small>(24 reviews)</small></span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="property-actions">
+                        <button class="btn btn-outline-primary me-2"><i class="bi bi-share"></i> Share</button>
+                        <button class="btn btn-outline-primary"><i class="bi bi-heart"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Property Gallery -->
+        <div class="property-gallery mb-5">
+            <div id="listingCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    {% for image in listing.images.all %}
+                        <button type="button" data-bs-target="#listingCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+                    {% empty %}
+                        <button type="button" data-bs-target="#listingCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner rounded-4 overflow-hidden">
+                    {% for image in listing.images.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            {% if image.image %}
+                                <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ listing.title }}">
+                            {% else %}
+                                <img src="{{ image.image_url }}" class="d-block w-100" alt="{{ listing.title }}">
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="carousel-item active">
+                            <img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1600&auto=format&fit=crop" class="d-block w-100" alt="{{ listing.title }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#listingCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#listingCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Property Overview -->
+                <div class="property-overview mb-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="section-title">{{ listing.title }} hosted by {{ listing.user.name }}</h2>
+                            <div class="property-highlights">
+                                <span><i class="bi bi-people"></i> {{ listing.max_guests }} guests</span>
+                                <span><i class="bi bi-door-closed"></i> {{ listing.bedrooms }} bedrooms</span>
+                                <span><i class="bi bi-droplet"></i> {{ listing.bathrooms }} bathrooms</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="host-preview">
+                                {% if listing.user.profile_picture %}
+                                    <img src="{{ listing.user.profile_picture }}" class="rounded-circle" alt="Host">
+                                {% else %}
+                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                        <span>{{ listing.user.name|first }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Description -->
+                <div class="property-description mb-4">
+                    <h3 class="section-title">About this place</h3>
+                    <div class="description-content">
+                        <p>{{ listing.description }}</p>
+                    </div>
+                </div>
+                
+                <!-- Property Amenities -->
+                <div class="property-amenities mb-4">
+                    <h3 class="section-title">What this place offers</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="amenities-list">
+                                <li><i class="bi bi-wifi"></i> Wifi</li>
+                                <li><i class="bi bi-tv"></i> TV</li>
+                                <li><i class="bi bi-snow"></i> Air conditioning</li>
+                                <li><i class="bi bi-p-square"></i> Free parking</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="amenities-list">
+                                <li><i class="bi bi-water"></i> Pool</li>
+                                <li><i class="bi bi-fire"></i> Heating</li>
+                                <li><i class="bi bi-cup-hot"></i> Kitchen</li>
+                                <li><i class="bi bi-laptop"></i> Workspace</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary mt-3">Show all amenities</button>
+                </div>
+                
+                <!-- Location -->
+                <div class="property-location mb-4">
+                    <h3 class="section-title">Location</h3>
+                    <p>{{ listing.address }}, {{ listing.city }}, {{ listing.state }} {{ listing.zipcode }}</p>
+                    <div class="location-map rounded-4 overflow-hidden">
+                        <img src="https://via.placeholder.com/800x400" alt="Map" class="img-fluid">
+                    </div>
+                </div>
+                
+                <!-- Host Information -->
+                <div class="host-information mb-4">
+                    <h3 class="section-title">About your host</h3>
+                    <div class="host-profile">
+                        <div class="row">
+                            <div class="col-md-2">
+                                {% if listing.user.profile_picture %}
+                                    <img src="{{ listing.user.profile_picture }}" class="rounded-circle img-fluid" alt="Host">
+                                {% else %}
+                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                                        <span>{{ listing.user.name|first }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-10">
+                                <h4>{{ listing.user.name }}</h4>
+                                <p class="text-muted">Member since {{ listing.user.created_at|date:"F Y" }}</p>
+                                <div class="host-stats">
+                                    <span><i class="bi bi-star-fill"></i> 4.9 Rating</span>
+                                    <span><i class="bi bi-shield-check"></i> Identity verified</span>
+                                    <span><i class="bi bi-chat-dots"></i> Quick responses</span>
+                                </div>
+                                <p class="mt-3">I love sharing my space with travelers from around the world. I'm always available to help make your stay comfortable and memorable.</p>
+                                <a href="#" class="btn btn-outline-primary mt-2">Contact host</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reviews -->
+                <div class="property-reviews mb-4">
+                    <h3 class="section-title">Reviews</h3>
+                    <div class="reviews-summary">
+                        <div class="overall-rating">
+                            <span class="rating-score">4.9</span>
+                            <div class="rating-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </div>
+                            <span class="review-count">24 reviews</span>
+                        </div>
+                    </div>
+                    
+                    <div class="review-list mt-4">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Reviewer">
+                                <div>
+                                    <h5>John Smith</h5>
+                                    <p class="text-muted">June 2023</p>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>Amazing place! The location was perfect and the amenities were exactly as described. Would definitely stay here again.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="review-item">
+                            <div class="review-header">
+                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Reviewer">
+                                <div>
+                                    <h5>Emily Johnson</h5>
+                                    <p class="text-muted">May 2023</p>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>Great host and beautiful property. Everything was clean and comfortable. The host was very responsive to all our questions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline-primary mt-3">Show all 24 reviews</button>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Booking Card -->
+                <div class="booking-card sticky-top">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="booking-price mb-3">
+                                <span class="price">₹{{ listing.price|default:1500 }}</span> <span class="price-period">per night</span>
+                                <span class="rating float-end"><i class="bi bi-star-fill"></i> {{ listing.average_rating|default:"4.9" }} <small>({{ listing.review_count|default:"24" }})</small></span>
+                            </div>
+                            
+                            <form id="reserveForm" method="post" action="{% url 'reserve_listing' listing.id %}" class="booking-form">
+                                {% csrf_token %}
+                                <div class="date-picker mb-3">
+                                    <div class="row g-0">
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control rounded-start" id="check_in" name="check_in" required>
+                                                <label for="check_in">Check in</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control rounded-end" id="check_out" name="check_out" required>
+                                                <label for="check_out">Check out</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="guests" name="guests" min="1" value="1" required>
+                                    <label for="guests">Guests</label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100 btn-lg">Reserve</button>
+                                
+                                <div class="booking-disclaimer text-center mt-3">
+                                    <small class="text-muted">You won't be charged yet</small>
+                                </div>
+                            </form>
+                            
+                            <div class="booking-summary mt-4">
+                                <div class="price-detail d-flex justify-content-between mb-2">
+                                    <span>Nightly rate</span>
+                                    <span>₹{{ listing.price }}</span>
+                                </div>
+                                <div class="price-detail d-flex justify-content-between mb-2">
+                                    <span>Cleaning fee</span>
+                                    <span>₹50</span>
+                                </div>
+                                <div class="price-detail d-flex justify-content-between mb-2">
+                                    <span>Service fee</span>
+                                    <span>₹30</span>
+                                </div>
+                                <hr>
+                                <div class="price-total d-flex justify-content-between">
+                                    <strong>Total</strong>
+                                    <strong>₹{{ listing.price }}</strong>
+                                </div>
+                            </div>
+                            
+                            <!-- JavaScript for form submission -->
+                            <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const bookingForm = document.querySelector(".booking-form");
+                                const submitButton = bookingForm.querySelector("button[type='submit']");
+                                
+                                bookingForm.addEventListener("submit", function(e) {
+                                    e.preventDefault();
+                                    
+                                    // Prevent double submission
+                                    const originalText = submitButton.textContent;
+                                    submitButton.disabled = true;
+                                    submitButton.textContent = "Processing...";
+                                    
+                                    const formData = new FormData(bookingForm);
+                                    
+                                    fetch(bookingForm.action, {
+                                        method: "POST",
+                                        body: formData,
+                                        headers: {
+                                            "X-Requested-With": "XMLHttpRequest"
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Re-enable button
+                                        submitButton.disabled = false;
+                                        submitButton.textContent = originalText;
+                                        
+                                        if (data.success) {
+                                            window.location.href = "{% url 'my_bookings' %}";
+                                        } else {
+                                            // Redirect to my_bookings page even on error
+                                            window.location.href = "{% url 'my_bookings' %}";
+                                        }
+                                    })
+                                    .catch(error => {
+                                        // Re-enable button on error
+                                        submitButton.disabled = false;
+                                        submitButton.textContent = originalText;
+                                        console.error("Error:", error);
+                                        // Redirect to my_bookings page on error
+                                        window.location.href = "{% url 'my_bookings' %}";
+                                    });
+                                });
+                            });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

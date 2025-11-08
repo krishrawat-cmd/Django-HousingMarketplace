@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cancel Booking | StayEase{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Cancel Booking</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+                        <h4 class="mt-3">Are you sure you want to cancel this booking?</h4>
+                        <p class="text-muted">This action cannot be undone.</p>
+                    </div>
+
+                    <div class="booking-details mb-4">
+                        <h5>{{ booking.listing.title }}</h5>
+                        <p><i class="bi bi-geo-alt"></i> {{ booking.listing.city }}, {{ booking.listing.state }}</p>
+                        <p><strong>Dates:</strong> {{ booking.check_in|date:"M j, Y" }} - {{ booking.check_out|date:"M j, Y" }}</p>
+                        <p><strong>Guests:</strong> {{ booking.guests }}</p>
+                        <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
+                    </div>
+
+                    {% if messages %}
+                        <div class="messages mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form id="cancelBookingForm" method="post">
+                        {% csrf_token %}
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                            <a href="{% url 'my_bookings' %}" class="btn btn-outline-secondary">Keep My Booking</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('cancelBookingForm');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{% url 'my_bookings' %}";
+                } else {
+                    errorMessage.textContent = data.error;
+                    errorMessage.classList.remove('d-none');
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.remove('d-none');
+            });
+        });
+    });
+</script>
+{% endblock %}

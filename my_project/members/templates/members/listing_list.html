@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Explore Properties | StayEase{% endblock %}
+
+{% block hero %}
+<div class="sub-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row reveal-on-scroll">
+            <div class="col-lg-8">
+                <h1 class="sub-hero-title">Explore our properties</h1>
+                <p class="sub-hero-subtitle">Find the perfect place for your next stay</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <!-- Filter Section -->
+    <section class="filter-section mb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label>Property type</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active">All</button>
+                            <button type="button" class="btn btn-outline-primary">Houses</button>
+                            <button type="button" class="btn btn-outline-primary">Apartments</button>
+                            <button type="button" class="btn btn-outline-primary">Cabins</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Price range</label>
+                        <select class="form-select">
+                            <option selected>Any price</option>
+                            <option>₹0 - ₹50</option>
+                                <option>₹50 - ₹100</option>
+                                <option>₹100 - ₹200</option>
+                                <option>₹200+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Bedrooms</label>
+                        <select class="form-select">
+                            <option selected>Any</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>More filters</label>
+                        <button class="btn btn-outline-primary"><i class="bi bi-sliders"></i> Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Results Count -->
+    <div class="results-count mb-4 reveal-on-scroll">
+        <h2>{{ listings.count|default:"0" }} properties found</h2>
+        <div class="sort-options">
+            <span>Sort by:</span>
+            <select class="form-select form-select-sm">
+                <option selected>Recommended</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Highest Rated</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Listings Grid -->
+    <div class="row">
+        {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4 reveal-on-scroll">
+                <div class="property-card">
+                    <div class="property-image">
+                        {% if listing.images.first %}
+                            <img src="{{ listing.images.first.image_url }}" alt="{{ listing.title }}" class="img-fluid">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1200&auto=format&fit=crop" alt="{{ listing.title }}" class="img-fluid">
+                        {% endif %}
+                        <div class="property-favorite">
+                            <button class="btn-favorite"><i class="bi bi-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-meta">
+                            <span class="property-location"><i class="bi bi-geo-alt"></i> {{ listing.city }}</span>
+                            <span class="property-rating"><i class="bi bi-star-fill"></i> 4.9</span>
+                        </div>
+                        <h5 class="property-title">{{ listing.title }}</h5>
+                        <p class="property-description">{{ listing.description|truncatechars:100 }}</p>
+                        <div class="property-features">
+                            <span><i class="bi bi-people"></i> {{ listing.max_guests|default:"4" }} guests</span>
+                            <span><i class="bi bi-door-closed"></i> {{ listing.bedrooms|default:"2" }} bedrooms</span>
+                            <span><i class="bi bi-droplet"></i> {{ listing.bathrooms|default:"1" }} baths</span>
+                        </div>
+                        <div class="property-price">
+                            <span class="price">₹{{ listing.price|default:1500 }}</span> / night
+                        </div>
+                        <a href="{% url 'listing_detail' listing.id %}" class="btn btn-outline-primary w-100 mt-3">View details</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-house-slash fs-1"></i>
+                    <h4>No listings available</h4>
+                    <p>We're working on adding new properties. Check back soon!</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if listings.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if listings.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ listings.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+            
+            {% for i in listings.paginator.page_range %}
+                {% if listings.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if listings.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ listings.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+{% endblock %}

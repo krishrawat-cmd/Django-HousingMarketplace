@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4fc79"/>
+      <stop offset="1" stop-color="#96e6a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g5)"/>
+  <g fill="#fff" opacity="0.92">
+    <rect x="340" y="200" width="40" height="160"/>
+    <rect x="420" y="200" width="40" height="160"/>
+    <rect x="300" y="240" width="200" height="40"/>
+  </g>
+  <text x="30" y="470" font-family="Inter, Arial" font-size="28" fill="#22577a" opacity="0.9">Hyderabad</text>
+</svg>
+

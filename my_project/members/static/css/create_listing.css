@@ -1,0 +1,372 @@
+/* Create Listing Page Styles */
+.create-listing-container {
+    background: linear-gradient(135deg, #ffffff 0%, #fff8e8 100%);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.create-listing-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, #FF6B35, #f08a5d, #ffdf87);
+    z-index: 1;
+}
+
+.subtle-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f08a5d' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.create-listing-container:hover {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.create-listing-header {
+    color: #2c3e50;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 2.4rem;
+    background: linear-gradient(90deg, #FF6B35, #f08a5d, #ffdf87);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.create-listing-header:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, #FF6B35, #f08a5d, #ffdf87);
+    border-radius: 3px;
+}
+
+.section-title {
+    color: #5e4c3e;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+    font-size: 1.6rem;
+    padding-left: 15px;
+    border-left: 5px solid #ffdf87;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ffdf87;
+    box-shadow: 0 0 0 4px rgba(255, 223, 135, 0.2);
+    background-color: #fff;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #5e4c3e;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    display: block;
+}
+
+/* Submit Button */
+.btn-create-listing {
+    background: linear-gradient(90deg, #FF6B35, #f08a5d);
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(240, 138, 93, 0.3);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-create-listing:hover, .btn-create-listing:focus {
+    background: linear-gradient(90deg, #f08a5d, #FF6B35);
+    box-shadow: 0 15px 25px rgba(240, 138, 93, 0.4);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Wave Design Elements */
+body {
+    background-color: #ffffff;
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.wave-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 223, 135, 0.15) 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 75% 85%, 50% 70%, 25% 85%, 0 70%);
+    z-index: -1;
+}
+
+.wave-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(48, 102, 190, 0.15) 0%, rgba(94, 76, 62, 0.1) 100%);
+    clip-path: polygon(0 30%, 25% 15%, 50% 30%, 75% 15%, 100% 30%, 100% 100%, 0 100%);
+    z-index: -1;
+}
+
+.wave-accent {
+    position: absolute;
+    top: 50%;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(255, 223, 135, 0.2) 0%, rgba(240, 138, 93, 0.1) 100%);
+    border-radius: 50%;
+    z-index: -1;
+    animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Form Group Enhancements */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group:hover .form-label {
+    color: #FF6B35;
+}
+
+/* Date Inputs */
+input[type="date"].form-control {
+    padding-right: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .create-listing-header {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .form-control, .form-select {
+        padding: 12px 15px;
+    }
+    
+    .btn-create-listing {
+        padding: 14px 28px;
+    }
+}
+
+.btn-create-listing:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(215, 109, 119, 0.4);
+    background: linear-gradient(90deg, #3a1c71, #d76d77, #ffaf7b);
+    background-size: 200% auto;
+    animation: gradient 2s ease infinite;
+}
+
+.btn-create-listing:active {
+    transform: translateY(0);
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Form Group Animations */
+.form-group {
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.form-group:hover {
+    transform: translateY(-3px);
+}
+
+/* Image Preview */
+.image-preview-container {
+    width: 100%;
+    height: 200px;
+    border: 3px dashed #d76d77;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.image-preview-container:hover {
+    border-color: #3a1c71;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.image-preview-placeholder {
+    color: #d76d77;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .create-listing-container {
+        padding: 20px !important;
+    }
+    
+    .btn-create-listing {
+        width: 100%;
+    }
+}
+
+/* Alert messages */
+.alert {
+    border-radius: 10px;
+    border-left: 5px solid;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background-color: #f0fdf4;
+    border-left-color: #10b981;
+    color: #065f46;
+}
+
+.alert-danger {
+    background-color: #fef2f2;
+    border-left-color: #ef4444;
+    color: #991b1b;
+}
+
+/* Date picker customization */
+input[type="date"] {
+    color: #3a1c71;
+    cursor: pointer;
+}
+
+/* Checkbox and radio button styles */
+.form-check-input:checked {
+    background-color: #d76d77;
+    border-color: #d76d77;
+}
+
+/* Add a subtle pattern background */
+.subtle-pattern {
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d76d77' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Card body styling */
+.card-body {
+    position: relative;
+}
+
+.card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, rgba(255,175,123,0.2) 0%, rgba(255,175,123,0) 70%);
+    border-radius: 0 15px 0 100%;
+    z-index: 0;
+}
+
+.card-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, rgba(58,28,113,0.1) 0%, rgba(58,28,113,0) 70%);
+    border-radius: 0 100% 0 15px;
+    z-index: 0;
+}
+
+.card-body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Row styling */
+.row {
+    position: relative;
+    z-index: 1;
+}
+
+/* Add a decorative element */
+.decorative-element {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #3a1c71, #d76d77);
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: 0;
+}

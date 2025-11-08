@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Start Hosting | StayEase{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/create_listing.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Wave Design Elements -->
+<div class="wave-top"></div>
+<div class="wave-bottom"></div>
+<div class="wave-accent"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="create-listing-container p-4 p-md-5 subtle-pattern">
+                <h1 class="create-listing-header">List Your Property</h1>
+                
+                {% if messages %}
+                <div class="messages mb-4">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Property Details</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Property Title</label>
+                            {{ form.title }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.room_type.id_for_label }}" class="form-label">Property Type</label>
+                            {{ form.room_type }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.price.id_for_label }}" class="form-label">Price per Night (₹)</label>
+                            {{ form.price }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Property Image</label>
+                            {{ form.image }}
+                            <small class="form-text text-muted">{{ form.image.help_text }}</small>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Location</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                            {{ form.address }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">City</label>
+                            {{ form.city }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.state.id_for_label }}" class="form-label">State</label>
+                            {{ form.state }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.zipcode.id_for_label }}" class="form-label">Zipcode</label>
+                            {{ form.zipcode }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Availability</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.available_from.id_for_label }}" class="form-label">Available From</label>
+                            {{ form.available_from }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.available_to.id_for_label }}" class="form-label">Available To</label>
+                            {{ form.available_to }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-create-listing btn-lg">List Your Property</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

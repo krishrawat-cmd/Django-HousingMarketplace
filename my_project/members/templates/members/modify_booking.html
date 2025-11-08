@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Modify Booking | StayEase{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Modify Booking</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="booking-image rounded-4 overflow-hidden">
+                                {% if booking.listing.images.first %}
+                                    <img src="{{ booking.listing.images.first.image_url }}" class="img-fluid" alt="{{ booking.listing.title }}">
+                                {% else %}
+                                    <img src="{% static 'img/fallback-room.svg' %}" class="img-fluid" alt="{{ booking.listing.title }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{ booking.listing.title }}</h4>
+                            <p><i class="bi bi-geo-alt"></i> {{ booking.listing.city }}, {{ booking.listing.state }}</p>
+                            <p><strong>Current Booking:</strong> {{ booking.check_in|date:"M j, Y" }} - {{ booking.check_out|date:"M j, Y" }}</p>
+                            <p><strong>Guests:</strong> {{ booking.guests }}</p>
+                            <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
+                        </div>
+                    </div>
+
+                    {% if messages %}
+                        <div class="messages mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form id="modifyBookingForm" method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="check_in" class="form-label">Check-in Date</label>
+                                <input type="date" class="form-control" id="check_in" name="check_in" value="{{ booking.check_in|date:'Y-m-d' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="check_out" class="form-label">Check-out Date</label>
+                                <input type="date" class="form-control" id="check_out" name="check_out" value="{{ booking.check_out|date:'Y-m-d' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="guests" class="form-label">Number of Guests</label>
+                                <select class="form-select" id="guests" name="guests" required>
+                                    {% for i in "123456"|make_list %}
+                                        <option value="{{ forloop.counter }}" {% if booking.guests == forloop.counter %}selected{% endif %}>{{ forloop.counter }} guest{{ forloop.counter|pluralize }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <div id="errorMessage" class="alert alert-danger d-none"></div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <a href="{% url 'my_bookings' %}" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('modifyBookingForm');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{% url 'my_bookings' %}";
+                } else {
+                    errorMessage.textContent = data.error;
+                    errorMessage.classList.remove('d-none');
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.remove('d-none');
+            });
+        });
+    });
+</script>
+{% endblock %}
