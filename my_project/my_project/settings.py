@@ -25,7 +25,15 @@ SECRET_KEY = 'django-insecure-wi6*w=i(@bp2i$vqh27wn2n40+cylip^@xoptl#^u7f9x4q#w+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', 'https://django-housingmarketplace.onrender.com'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', 'https://django-housingmarketplace.onrender.com'
+                "django-housingmarketplace.onrender.com",
+    "localhost",
+    "127.0.0.1" ] 
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://django-housingmarketplace.onrender.com",
+    "https://*.onrender.com",
+]
 
 
 # Application definition
